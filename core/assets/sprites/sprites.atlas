@@ -1,0 +1,13 @@
+
+sprites.png
+size: 64,64
+format: rgba8888
+filter: nearest,nearest
+repeat: none
+error
+  rotate: false
+  xy: 2, 2
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
