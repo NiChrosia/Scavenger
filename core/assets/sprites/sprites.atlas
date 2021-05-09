@@ -1,13 +1,48 @@
 
 sprites.png
-size: 64,64
+size: 256,256
 format: rgba8888
 filter: nearest,nearest
 repeat: none
+air
+  rotate: false
+  xy: 205, 221
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+crate
+  rotate: false
+  xy: 52, 18
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+metal
+  rotate: false
+  xy: 205, 187
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+circle-shadow
+  rotate: false
+  xy: 2, 52
+  size: 201, 201
+  orig: 201, 201
+  offset: 0, 0
+  index: -1
 error
   rotate: false
   xy: 2, 2
   size: 48, 48
   orig: 48, 48
+  offset: 0, 0
+  index: -1
+cursor
+  rotate: false
+  xy: 86, 34
+  size: 16, 16
+  orig: 16, 16
   offset: 0, 0
   index: -1

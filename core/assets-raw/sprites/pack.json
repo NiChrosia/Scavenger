@@ -1,0 +1,7 @@
+{
+  combineSubdirectories: true,
+  flattenPaths: true,
+  maxWidth: 4096,
+  maxHeight: 4096,
+  fast: true
+}

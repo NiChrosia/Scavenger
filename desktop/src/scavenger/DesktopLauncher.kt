@@ -14,6 +14,7 @@ open class DesktopLauncher(arg: Array<String>) {
 						title = "Scavenger"
 						width = 900
 						height = 700
+						maximized = true
 					}
 			)
 		}

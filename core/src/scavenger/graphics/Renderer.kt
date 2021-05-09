@@ -4,23 +4,27 @@ import arc.ApplicationListener
 import arc.Core
 import arc.graphics.Color
 import arc.graphics.g2d.Draw
-import scavenger.input.InputHandler
+import scavenger.desktop.ClientLauncher
+import scavenger.world.Layer
 
 open class Renderer : ApplicationListener {
-    open var input = InputHandler()
-
     override fun update() {
         Core.camera.update()
         Core.graphics.clear(Color.black)
         Draw.proj(Core.camera)
 
         val mouse = Core.input.mouseWorld()
-        val texture = Core.atlas.find("ohno")
+        val texture = Core.atlas.find("cursor")
 
-        Draw.color(Color.red)
-        Draw.rect(texture, 0f, 0f)
-        Draw.color()
-        Draw.rect(texture, mouse.x, mouse.y)
+        Draw.z(Layer.cursor)
+        Draw.rect(
+            texture,
+            mouse.x,
+            mouse.y,
+            texture.width / ClientLauncher.scale,
+            texture.height / ClientLauncher.scale
+        )
+        Draw.z()
         Draw.flush()
     }
 
