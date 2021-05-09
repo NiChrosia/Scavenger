@@ -43,7 +43,6 @@ open class ClientLauncher : ApplicationCore() {
             setUp(KeyCode.shiftLeft, { speedMultiplier = maxSpeed }, { speedMultiplier = defaultSpeed })
             setUp(KeyCode.shiftRight, { speedMultiplier = maxSpeed }, { speedMultiplier = defaultSpeed })
         }
-        Log.info("Pos: ${Core.camera.position}")
     }
 
     override fun exit() {

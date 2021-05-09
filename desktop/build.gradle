@@ -16,15 +16,17 @@ task run(dependsOn: [classes, ":core:pack"], type: JavaExec) {
     ignoreExitValue = true
 }
 
-task dist(type: Jar) {
-    from files(sourceSets.main.output.classesDirs)
-    from files(sourceSets.main.output.resourcesDir)
-    from {configurations.compile.collect {it.isDirectory() ? it : zipTree(it)}}
-    from files(project.assetsDir);
+task dist(dependsOn: [classes], type: Jar) {
+    from(sourceSets.main.output.classesDirs) { include "**" }
+    from(sourceSets.main.output.resourcesDir) { include "**" }
+    from(project.assetsDir) { include "**" }
+    from {
+        configurations.compileClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
  
     manifest {
         attributes 'Main-Class': project.mainClassName
     }
 }
-
-dist.dependsOn classes

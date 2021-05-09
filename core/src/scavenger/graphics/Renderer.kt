@@ -1,4 +1,4 @@
-package scavenger.render
+package scavenger.graphics
 
 import arc.ApplicationListener
 import arc.Core
