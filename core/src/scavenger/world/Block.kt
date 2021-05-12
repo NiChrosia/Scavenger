@@ -23,9 +23,9 @@ open class Block(name: String) {
 
         fun draw() {
             if (solid) {
-                Draw.z(Layer.shadow)
-                Drawf.shadow(xPos, yPos, 1f * Vars.tilesize)
+                Drawf.shadow(xPos, yPos, width = Vars.tilesize, height = Vars.tilesize)
             }
+
             Draw.z(Layer.block)
             Draw.rect(sprite, xPos, yPos, Vars.tilesize.toFloat(), Vars.tilesize.toFloat())
             Draw.z()

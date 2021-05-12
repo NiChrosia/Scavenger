@@ -6,7 +6,9 @@ buildscript {
         appName = "scavenger"
         gdxVersion = '1.9.10'
         getArcHash = {
-            return new Properties().with{ p -> p.load(file('gradle.properties').newReader()); return p }["archash"]
+            return new Properties().with {
+                it.load(file('gradle.properties').newReader()); return it
+            }["archash"]
         }
 
         arcHash = getArcHash()
@@ -50,12 +52,11 @@ project(":desktop") {
     dependencies {
         implementation project(":core")
 
-        implementation arcModule("extensions:recorder")
+        implementation arcModule("arc-core")
+
         implementation arcModule("backends:backend-sdl")
         implementation arcModule("natives:natives-desktop")
         implementation arcModule("natives:natives-freetype-desktop")
-        implementation arcModule("arc-core")
-        implementation arcModule("extensions:fx")
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     }
 }
@@ -65,7 +66,7 @@ project(":core") {
 
     dependencies {
         implementation arcModule("arc-core")
-        implementation arcModule("extensions:fx")
+
         implementation "com.github.Anuken.Arc:packer:$arcVersion"
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     }
