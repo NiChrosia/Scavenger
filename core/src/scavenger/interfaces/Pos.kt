@@ -7,6 +7,8 @@ import scavenger.world.Tile
 interface Pos : Position {
     var xPos: Float
     var yPos: Float
+    override fun getX() = xPos
+    override fun getY() = yPos
 
     fun set(x: Float, y: Float) {
         this.xPos = x

@@ -10,12 +10,15 @@ open class Block(name: String) {
     open var sprite = Core.atlas.find(name)
     open var solid = false
 
-    inner class BlockEntity(override var xPos: Float, override var yPos: Float) : Pos {
-        override fun getX() = xPos
-        override fun getY() = yPos
+    inner class Building(override var xPos: Float, override var yPos: Float) : Pos {
+        val block = this@Block
+
+        init {
+            Vars.groups.blocks.add(this)
+        }
 
         fun update() {
-            draw()
+
         }
 
         fun draw() {
@@ -24,7 +27,7 @@ open class Block(name: String) {
                 Drawf.shadow(xPos, yPos, 1f * Vars.tilesize)
             }
             Draw.z(Layer.block)
-            Draw.rect(sprite, xPos, yPos)
+            Draw.rect(sprite, xPos, yPos, Vars.tilesize.toFloat(), Vars.tilesize.toFloat())
             Draw.z()
         }
     }

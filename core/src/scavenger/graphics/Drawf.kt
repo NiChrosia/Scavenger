@@ -1,6 +1,5 @@
 package scavenger.graphics
 
-import arc.Core
 import arc.graphics.g2d.Draw
 import arc.graphics.g2d.TextureRegion
 
@@ -14,8 +13,8 @@ open class Drawf {
             Draw.color(Palette.shadow)
             Draw.alpha(alpha)
             Draw.rect("circle-shadow", x, y, radius * 2, radius * 2)
-            Draw.color()
             Draw.alpha(1f)
+            Draw.color()
         }
 
         fun shadow(region: TextureRegion, x: Float, y: Float) {

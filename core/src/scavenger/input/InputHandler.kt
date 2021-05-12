@@ -22,11 +22,7 @@ open class InputHandler : InputProcessor {
         val heldKeys = Seq<KeyCode>()
         /** A map with a keycode, a () -> Unit for active, a () -> Unit for when the key is pressed down,
          * and a () -> Unit for when the key is lifted up */
-        val keyMap = ObjectMap<KeyCode, Triple<() -> Unit, () -> Unit, () -> Unit>>()
-    }
-
-    fun getKeys(): Seq<KeyCode> {
-        return heldKeys
+        val keyMap = ObjectMap<KeyCode, Seq<Triple<() -> Unit, () -> Unit, () -> Unit>>>()
     }
 
     override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
@@ -42,7 +38,9 @@ open class InputHandler : InputProcessor {
         if (keycode == null) return false
 
         heldKeys.add(keycode)
-        if (keyMap.containsKey(keycode)) keyMap.get(keycode).second()
+        if (keyMap.containsKey(keycode)) keyMap.get(keycode).each {
+            it.second()
+        }
         return true
     }
 
@@ -50,40 +48,50 @@ open class InputHandler : InputProcessor {
         if (keycode == null) return false
 
         if (heldKeys.contains(keycode)) heldKeys.remove(keycode)
-        if (keyMap.containsKey(keycode)) keyMap.get(keycode).third()
+        if (keyMap.containsKey(keycode)) keyMap.get(keycode).each {
+            it.third()
+        }
         return true
     }
 
     open fun update() {
         heldKeys.each { k ->
-            if (keyMap.containsKey(k)) keyMap.get(k).first()
+            if (keyMap.containsKey(k)) keyMap.get(k).each {
+                it.first()
+            }
         }
 
-        scrollY = Mathf.clamp(scrollY, Vars.minZoom.toFloat(), Vars.maxZoom.toFloat())
+        scrollY = Mathf.clamp(scrollY, Vars.minZoom, Vars.maxZoom)
     }
 
     override fun scrolled(amountX: Float, amountY: Float): Boolean {
         scrollX += -(amountX * 0.2f)
         scrollY += -(amountY * 0.2f)
 
-        scrollY = Mathf.clamp(scrollY, Vars.minZoom.toFloat(), Vars.maxZoom.toFloat())
+        scrollY = Mathf.clamp(scrollY, Vars.minZoom, Vars.maxZoom)
 
         return amountX != 0f && amountY != 0f
     }
 
     open fun set(keycode: KeyCode, active: () -> Unit, down: () -> Unit, up: () -> Unit) {
-        keyMap.put(keycode, Triple(active, down, up))
+        val input = Seq.with(Triple(active, down, up))
+
+        if (keyMap.containsKey(keycode)) {
+            keyMap.get(keycode).addAll(input)
+        } else {
+            keyMap.put(keycode, input)
+        }
     }
 
     open fun set(keycode: KeyCode, active: () -> Unit) {
-        keyMap.put(keycode, Triple(active, {}, {}))
+        set(keycode, active, {}, {})
     }
 
     open fun setDown(keycode: KeyCode, active: () -> Unit, down: () -> Unit) {
-        keyMap.put(keycode, Triple(active, down, {}))
+        set(keycode, active, down, {})
     }
 
     open fun setUp(keycode: KeyCode, active: () -> Unit, up: () -> Unit) {
-        keyMap.put(keycode, Triple(active, {}, up))
+        set(keycode, active, {}, up)
     }
 }

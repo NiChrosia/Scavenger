@@ -34,7 +34,7 @@ open class TileContainer(var width: Int, var height: Int) {
         if (isInBounds(x, y)) {
             return tileArr[y][x]
         } else {
-            throw IndexOutOfBoundsException()
+            throw IndexOutOfBoundsException("Cannot find tile at position ($x, $y)")
         }
     }
 
@@ -44,18 +44,16 @@ open class TileContainer(var width: Int, var height: Int) {
         for (y in 0..height) {
             tileArr.add(Seq<Tile>())
             for (x in 0..width) {
-                tileArr[y].add(Tile(
-                    Floors.metal.FloorEntity(
-                        (x * Vars.tilesize).toFloat(),
-                        (y * Vars.tilesize).toFloat()
-                    ),
-                    if (Mathf.chance(0.2)) Blocks.crate.BlockEntity(
-                        (x * Vars.tilesize).toFloat(),
-                        (y * Vars.tilesize).toFloat()
-                    ) else Blocks.air.BlockEntity(
-                        (x * Vars.tilesize).toFloat(),
-                        (y * Vars.tilesize).toFloat()
-                    )
+                val posX = (x * Vars.tilesize).toFloat()
+                val posY = (y * Vars.tilesize).toFloat()
+                
+                tileArr[y].add(Tile(posX, posY,
+                    Floors.metal,
+                    if (Mathf.chance(0.2)) {
+                        Blocks.crate.Building(posX, posY)
+                    } else {
+                        Blocks.air.Building(posX, posY)
+                    }
                 ))
             }
         }
