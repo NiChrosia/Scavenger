@@ -51,7 +51,6 @@ class TileContainer(var width: Int, var height: Int) {
                 val posY = (y * Vars.tilesize).toFloat()
 
                 val noiseLevel = simplex.octaveNoise2D(0.01, 0.1, 0.1, posX * 1.0, posY * 1.0)
-                Log.info(noiseLevel)
 
                 tileArr[y].add(Tile(posX, posY,
                     if (noiseLevel > 0.55) Floors.metal else Floors.wood,
