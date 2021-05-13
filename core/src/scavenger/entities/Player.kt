@@ -1,53 +1,76 @@
 package scavenger.entities
 
+import arc.Core
 import arc.graphics.g2d.Draw
 import arc.input.KeyCode
+import arc.math.Angles
 import arc.math.geom.Vec2
+import arc.struct.ObjectMap
+import arc.struct.Seq
 import scavenger.Vars
 import scavenger.interfaces.Pos
-import scavenger.math.Mathm
 import scavenger.world.Layer
 
-class Player(override var xPos: Float, override var yPos: Float, val type: EntityType) : Pos {
-    private var location = Vec2(xPos, yPos)
+open class Player(override var xPos: Float, override var yPos: Float, open val type: EntityType) : Pos {
     private var rotation = 0f
+    private var direction: Float? = null
+    private var moving = false
+    private var keys = Seq<KeyCode>()
+    open val keyMap = ObjectMap<KeyCode, Float>()
 
     init {
+        keyMap.putAll(ObjectMap.of(
+            KeyCode.a, 180f,
+            KeyCode.w, 90f,
+            KeyCode.s, 270f,
+            KeyCode.d, 0f
+        ))
+
         Vars.groups.entities.add(this)
         
         Vars.input.apply {
-            set(KeyCode.a) { move(180f) }
-            set(KeyCode.w) { move(90f) }
-            set(KeyCode.s) { move(270f) }
-            set(KeyCode.d) { move(0f) }
+            setUp(KeyCode.a, { keys.add(KeyCode.a) }, { keys = Seq.with(); direction = null })
+            setUp(KeyCode.w, { keys.add(KeyCode.w) }, { keys = Seq.with(); direction = null })
+            setUp(KeyCode.s, { keys.add(KeyCode.s) }, { keys = Seq.with(); direction = null })
+            setUp(KeyCode.d, { keys.add(KeyCode.d) }, { keys = Seq.with(); direction = null })
         }
     }
 
-     fun update() {
+    fun update() {
+        val directionSeq = Seq<Float>()
+        keys.each {
+            directionSeq.add(keyMap.get(it))
+        }
+        if (directionSeq.size > 0) direction = directionSeq.average().toFloat()
 
+        Core.camera.position.set(xPos, yPos)
+
+        move()
     }
 
-     fun draw() {
+    fun draw() {
         Draw.z(Layer.entity)
-        Draw.rect(type.sprite, location.x, location.y, rotation)
+        Draw.rect(type.sprite, xPos, yPos, Vars.tilesize.toFloat(), Vars.tilesize.toFloat(), rotation)
         Draw.z()
     }
 
-     fun move(direction: Float) {
+    /** Moves in a direction. Will automatically rotate to the direction if not already. */
+    private fun move() {
+        moving = true
         if (rotation != direction) {
-            rawRotate(Mathm.closestAngle(rotation, direction, type.rotateSpeed))
+            rotation = Angles.moveToward(rotation, direction ?: 0f, type.rotateSpeed)
         } else {
-            rawMove(direction, type.rotateSpeed / 60 * Vars.tilesize)
+            rawMove(direction ?: 0f, type.speed / 60 * Vars.tilesize)
         }
+
+
+        moving = false
     }
 
      /** Moves the player an amount in a direction. Not to be used directly. */
      private fun rawMove(direction: Float, amount: Float) {
-        location.trns(direction, amount)
-    }
-
-     /** Rotates the player the specified amount. Not to be used directly. */
-     private fun rawRotate(amount: Float) {
-        rotation += amount
+         val vec = Vec2().trns(direction + 90f % 360, amount)
+         xPos += vec.x
+         yPos += vec.y
     }
 }

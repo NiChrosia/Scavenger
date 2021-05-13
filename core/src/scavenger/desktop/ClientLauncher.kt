@@ -9,6 +9,7 @@ import arc.graphics.g2d.SortedSpriteBatch
 import arc.graphics.g2d.TextureAtlas
 import arc.input.KeyCode
 import arc.scene.Scene
+import kotlinx.coroutines.runBlocking
 import scavenger.Vars
 import scavenger.content.EntityTypes
 import scavenger.entities.Player
@@ -42,11 +43,19 @@ open class ClientLauncher : ApplicationCore() {
     override fun update() {
         super.update()
 
-        Vars.world.eachTile {
-            it.update()
+        fun update() = runBlocking {
+            Vars.groups.tiles.each {
+                it.update()
+            }
+
+            Vars.groups.entities.each {
+                it.update()
+            }
+
+            Vars.input.update()
         }
 
-        Vars.input.update()
+        update()
     }
 
     override fun exit() {

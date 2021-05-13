@@ -1,6 +1,7 @@
 package scavenger.interfaces
 
 import arc.math.geom.Position
+import arc.math.geom.Vec2
 import scavenger.Vars
 import scavenger.world.Tile
 
@@ -13,6 +14,11 @@ interface Pos : Position {
     fun set(x: Float, y: Float) {
         this.xPos = x
         this.yPos = y
+    }
+
+    fun set(vec: Vec2) {
+        this.xPos = vec.x
+        this.yPos = vec.y
     }
 
     fun tileOn(): Tile {

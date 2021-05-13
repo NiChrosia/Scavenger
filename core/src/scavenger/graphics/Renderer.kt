@@ -8,6 +8,7 @@ import scavenger.Vars
 import scavenger.world.Layer
 import arc.math.Mathf
 import arc.math.geom.Circle
+import kotlinx.coroutines.runBlocking
 
 open class Renderer : ApplicationListener {
     open val circleSize = 70f * Vars.tilesize
@@ -32,14 +33,17 @@ open class Renderer : ApplicationListener {
             circleSize / scale
         )
 
-        // TODO implement a rectangle system rather than a circle
-        Vars.groups.tiles.each {
-            if (circle.contains(it.x, it.y)) it.draw()
+        fun draw() = runBlocking {
+            Vars.groups.tiles.each { tile ->
+                if (circle.contains(tile.x, tile.y)) tile.draw()
+            }
+
+            Vars.groups.entities.each {
+                if (circle.contains(it.x, it.y)) it.draw()
+            }
         }
 
-        Vars.groups.entities.each {
-            if (circle.contains(it.x, it.y)) it.draw()
-        }
+        draw()
 
         val mouse = Core.input.mouseWorld()
         val texture = Core.atlas.find("cursor")

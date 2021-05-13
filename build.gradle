@@ -67,6 +67,7 @@ project(":core") {
     dependencies {
         implementation arcModule("arc-core")
 
+        implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0-RC"
         implementation "com.github.Anuken.Arc:packer:$arcVersion"
         implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     }

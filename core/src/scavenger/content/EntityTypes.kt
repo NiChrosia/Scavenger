@@ -5,7 +5,8 @@ import scavenger.entities.EntityType
 class EntityTypes {
     companion object {
         val default = EntityType("default").apply {
-            rotateSpeed = 10f
+            rotateSpeed = 4f
+            speed = 10f
         }
     }
 }

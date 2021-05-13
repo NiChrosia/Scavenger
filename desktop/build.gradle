@@ -4,7 +4,7 @@ sourceCompatibility = 1.8
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 ext {
-    mainClassName = "scavenger.DesktopLauncher"
+    mainClassName = "scavenger.DesktopLauncherKt"
     assetsDir = new File("../core/assets")
 }
 

@@ -11,15 +11,15 @@ open class Drawf {
             x: Float,
             y: Float,
             region: TextureRegion = Core.atlas.find("circle-shadow"),
-            width: Int = region.width,
-            height: Int = region.height,
+            width: Float = region.width * 1.2f,
+            height: Float = region.height * 1.2f,
             rotation: Float = 0f,
             alpha: Float = 1f
         ) {
 		    Draw.z(Layer.shadow)
             Draw.color(Palette.shadow)
             Draw.alpha(alpha)
-            Draw.rect(region, x, y, width.toFloat(), height.toFloat(), rotation)
+            Draw.rect(region, x, y, width, height, rotation)
             Draw.alpha(1f)
             Draw.color()
 		    Draw.z()

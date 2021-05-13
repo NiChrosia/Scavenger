@@ -23,7 +23,7 @@ open class Block(name: String) {
 
         fun draw() {
             if (solid) {
-                Drawf.shadow(xPos, yPos, width = Vars.tilesize, height = Vars.tilesize)
+                Drawf.shadow(xPos, yPos, width = Vars.tilesize * 2f, height = Vars.tilesize * 2f)
             }
 
             Draw.z(Layer.block)
