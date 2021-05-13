@@ -5,5 +5,6 @@ import scavenger.world.Floor
 class Floors {
     companion object {
         val metal = Floor("metal")
+        val wood = Floor("wood")
     }
 }

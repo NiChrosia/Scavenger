@@ -8,31 +8,37 @@ import arc.math.geom.Vec2
 import arc.struct.ObjectMap
 import arc.struct.Seq
 import scavenger.Vars
+import scavenger.graphics.Drawf
 import scavenger.interfaces.Pos
 import scavenger.world.Layer
+import kotlin.math.abs
 
-open class Player(override var xPos: Float, override var yPos: Float, open val type: EntityType) : Pos {
+open class Player(
+    override var xPos: Float,
+    override var yPos: Float,
+    open val type: EntityType,
+    ) : Pos {
     private var rotation = 0f
-    private var direction: Float? = null
+    private var direction: Float = 0f
     private var moving = false
     private var keys = Seq<KeyCode>()
     open val keyMap = ObjectMap<KeyCode, Float>()
 
     init {
         keyMap.putAll(ObjectMap.of(
-            KeyCode.a, 180f,
-            KeyCode.w, 90f,
-            KeyCode.s, 270f,
-            KeyCode.d, 0f
+            KeyCode.a, 90f,
+            KeyCode.w, 0f,
+            KeyCode.s, 180f,
+            KeyCode.d, 270f
         ))
 
         Vars.groups.entities.add(this)
         
         Vars.input.apply {
-            setUp(KeyCode.a, { keys.add(KeyCode.a) }, { keys = Seq.with(); direction = null })
-            setUp(KeyCode.w, { keys.add(KeyCode.w) }, { keys = Seq.with(); direction = null })
-            setUp(KeyCode.s, { keys.add(KeyCode.s) }, { keys = Seq.with(); direction = null })
-            setUp(KeyCode.d, { keys.add(KeyCode.d) }, { keys = Seq.with(); direction = null })
+            setUp(KeyCode.a, { keys.add(KeyCode.a); moving = true }, { keys = Seq.with(); moving = false })
+            setUp(KeyCode.w, { keys.add(KeyCode.w); moving = true }, { keys = Seq.with(); moving = false })
+            setUp(KeyCode.s, { keys.add(KeyCode.s); moving = true }, { keys = Seq.with(); moving = false })
+            setUp(KeyCode.d, { keys.add(KeyCode.d); moving = true }, { keys = Seq.with(); moving = false })
         }
     }
 
@@ -41,6 +47,7 @@ open class Player(override var xPos: Float, override var yPos: Float, open val t
         keys.each {
             directionSeq.add(keyMap.get(it))
         }
+
         if (directionSeq.size > 0) direction = directionSeq.average().toFloat()
 
         Core.camera.position.set(xPos, yPos)
@@ -49,6 +56,15 @@ open class Player(override var xPos: Float, override var yPos: Float, open val t
     }
 
     fun draw() {
+        Drawf.shadow(xPos - 2f,
+            yPos - 2f,
+            type.sprite,
+            Vars.tilesize.toFloat(),
+            Vars.tilesize.toFloat(),
+            alpha = 0.6f,
+            rotation = rotation
+        )
+
         Draw.z(Layer.entity)
         Draw.rect(type.sprite, xPos, yPos, Vars.tilesize.toFloat(), Vars.tilesize.toFloat(), rotation)
         Draw.z()
@@ -56,15 +72,13 @@ open class Player(override var xPos: Float, override var yPos: Float, open val t
 
     /** Moves in a direction. Will automatically rotate to the direction if not already. */
     private fun move() {
-        moving = true
-        if (rotation != direction) {
-            rotation = Angles.moveToward(rotation, direction ?: 0f, type.rotateSpeed)
-        } else {
-            rawMove(direction ?: 0f, type.speed / 60 * Vars.tilesize)
+        if (moving) {
+            rotation = Angles.moveToward(rotation, direction, type.rotateSpeed)
+
+            val speed = type.speed / 60 * Vars.tilesize / if (abs(direction - rotation) > 0) abs(direction - rotation) else 1f
+
+            rawMove(direction, speed)
         }
-
-
-        moving = false
     }
 
      /** Moves the player an amount in a direction. Not to be used directly. */

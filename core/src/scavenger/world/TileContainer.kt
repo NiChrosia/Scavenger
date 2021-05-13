@@ -3,18 +3,21 @@ package scavenger.world
 import arc.func.Cons
 import arc.math.Mathf
 import arc.struct.Seq
+import arc.util.Log
+import arc.util.noise.Simplex
 import scavenger.Vars
 import scavenger.content.Blocks
 import scavenger.content.Floors
 
-open class TileContainer(var width: Int, var height: Int) {
+class TileContainer(var width: Int, var height: Int) {
     private var tileArr = Seq<Seq<Tile>>()
+    private val simplex = Simplex(1)
 
     init {
         reset()
     }
 
-    open fun each(cons: Cons<Tile>) {
+    fun each(cons: Cons<Tile>) {
         tileArr.each {
             it.each { tile ->
                 cons.get(tile)
@@ -22,15 +25,15 @@ open class TileContainer(var width: Int, var height: Int) {
         }
     }
 
-    open fun isInBounds(x: Int, y: Int): Boolean {
+    fun isInBounds(x: Int, y: Int): Boolean {
         return x <= width && y <= height
     }
 
-    open fun set(x: Int, y: Int, tile: Tile) {
+    fun set(x: Int, y: Int, tile: Tile) {
         tileArr[y][x] = tile
     }
 
-    open fun get(x: Int, y: Int): Tile {
+    fun get(x: Int, y: Int): Tile {
         if (isInBounds(x, y)) {
             return tileArr[y][x]
         } else {
@@ -38,7 +41,7 @@ open class TileContainer(var width: Int, var height: Int) {
         }
     }
 
-    open fun reset() {
+    private fun reset() {
         tileArr = Seq<Seq<Tile>>()
 
         for (y in 0..height) {
@@ -46,10 +49,13 @@ open class TileContainer(var width: Int, var height: Int) {
             for (x in 0..width) {
                 val posX = (x * Vars.tilesize).toFloat()
                 val posY = (y * Vars.tilesize).toFloat()
-                
+
+                val noiseLevel = simplex.octaveNoise2D(0.01, 0.1, 0.1, posX * 1.0, posY * 1.0)
+                Log.info(noiseLevel)
+
                 tileArr[y].add(Tile(posX, posY,
-                    Floors.metal,
-                    if (Mathf.chance(0.2)) {
+                    if (noiseLevel > 0.55) Floors.metal else Floors.wood,
+                    if (noiseLevel > 0.75) {
                         Blocks.crate.Building(posX, posY)
                     } else {
                         Blocks.air.Building(posX, posY)

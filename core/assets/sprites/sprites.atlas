@@ -4,51 +4,65 @@ size: 256,256
 format: rgba8888
 filter: nearest,nearest
 repeat: none
-air
+block-air
   rotate: false
-  xy: 205, 221
+  xy: 205, 206
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 icon
   rotate: false
-  xy: 205, 221
+  xy: 205, 206
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-crate
+block-crate
   rotate: false
-  xy: 52, 18
+  xy: 37, 3
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-metal
+default
   rotate: false
-  xy: 205, 187
+  xy: 205, 172
   size: 32, 32
   orig: 32, 32
+  offset: 0, 0
+  index: -1
+floor-metal
+  rotate: false
+  xy: 205, 138
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+floor-wood
+  rotate: false
+  xy: 2, 2
+  size: 33, 33
+  orig: 33, 33
   offset: 0, 0
   index: -1
 circle-shadow
   rotate: false
-  xy: 2, 52
+  xy: 2, 37
   size: 201, 201
   orig: 201, 201
   offset: 0, 0
   index: -1
 error
   rotate: false
-  xy: 2, 2
-  size: 48, 48
-  orig: 48, 48
+  xy: 71, 3
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: -1
 cursor
   rotate: false
-  xy: 86, 34
+  xy: 105, 19
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

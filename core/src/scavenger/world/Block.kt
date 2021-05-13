@@ -6,8 +6,8 @@ import scavenger.Vars
 import scavenger.graphics.Drawf
 import scavenger.interfaces.Pos
 
-open class Block(name: String) {
-    open var sprite = Core.atlas.find(name)
+open class Block(open val name: String) {
+    open var sprite = Core.atlas.find("block-$name")
     open var solid = false
 
     inner class Building(override var xPos: Float, override var yPos: Float) : Pos {
