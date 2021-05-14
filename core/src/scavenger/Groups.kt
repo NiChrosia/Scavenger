@@ -9,4 +9,6 @@ open class Groups {
     val entities = Seq<Player>()
     val blocks = Seq<Block.Building>()
     val tiles = Seq<Tile>()
+
+    val hittable = Seq<Any>()
 }

@@ -53,8 +53,8 @@ class TileContainer(var width: Int, var height: Int) {
                 val noiseLevel = simplex.octaveNoise2D(0.01, 0.1, 0.1, posX * 1.0, posY * 1.0)
 
                 tileArr[y].add(Tile(posX, posY,
-                    if (noiseLevel > 0.55) Floors.metal else Floors.wood,
-                    if (noiseLevel > 0.75) {
+                    if (noiseLevel > Mathf.random(0.75f)) Floors.metal else Floors.wood,
+                    if (noiseLevel > 0.95) {
                         Blocks.crate.Building(posX, posY)
                     } else {
                         Blocks.air.Building(posX, posY)

@@ -15,6 +15,7 @@ open class Block(open val name: String) {
 
         init {
             Vars.groups.blocks.add(this)
+            Vars.groups.hittable.add(this)
         }
 
         fun update() {
