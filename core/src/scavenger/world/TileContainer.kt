@@ -54,7 +54,7 @@ class TileContainer(var width: Int, var height: Int) {
 
                 tileArr[y].add(Tile(posX, posY,
                     if (noiseLevel > Mathf.random(0.75f)) Floors.metal else Floors.wood,
-                    if (noiseLevel > 0.95) {
+                    if (noiseLevel > 0.75) {
                         Blocks.crate.Building(posX, posY)
                     } else {
                         Blocks.air.Building(posX, posY)

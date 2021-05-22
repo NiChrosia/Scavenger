@@ -26,6 +26,7 @@ open class Player(
     private var direction: Float = 0f
     private var moving = false
     private var keys = Seq<KeyCode>()
+    private var dstToHitbox = 0f
     open val keyMap = ObjectMap<KeyCode, Float>()
 
     init {
@@ -87,6 +88,7 @@ open class Player(
             Vars.groups.hittable.each {
                 if (it != this) {
                     if (it is Pos) {
+
                         if (it is Block.Building) if (!it.block.solid) return@each
 
                         if (Rect(
@@ -97,11 +99,13 @@ open class Player(
                             ).contains(Vec2().trns(rotation, speed).apply {
                                 add(xPos, yPos)
                             })) {
-                                collides = collides || true
+                                collides = collides || dstToHitbox > dst(it)
 
                                 Log.info(Vec2(it.x, it.y))
                                 Log.info(Vec2(xPos, yPos))
                         }
+
+                        dstToHitbox = dst(it)
                     }
                 }
             }
